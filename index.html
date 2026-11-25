@@ -6,9 +6,9 @@
 <title>Мерч университета</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;800&display=swap">
 <style>
-:root{--bg:#fff;--surface:#f7f1f2;--ink:#2a1318;--muted:#6b5459;--brand:#7e2e42;--on-brand:#fff;--line:#e6d8da;--price:#7a1f2e;color-scheme:light}
+:root{--bg:#fff;--surface:#f7f1f2;--ink:#2a1318;--muted:#6b5459;--brand:#7a1f2e;--on-brand:#fff;--line:#e6d8da;--price:#7a1f2e;color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#170c0f;--surface:#241318;--ink:#f7eeef;--muted:#b9a2a6;--brand:#8e2a3b;--line:#3a2328;--price:#e48e9d;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#170c0f;--surface:#241318;--ink:#f7eeef;--muted:#b9a2a6;--brand:#800020;--line:#3a2328;--price:#e48e9d;color-scheme:dark}
+:root[data-theme="dark"]{--bg:#170c0f;--surface:#241318;--ink:#f7eeef;--muted:#b9a2a6;--brand:#8e2a3b;--line:#3a2328;--price:#e48e9d;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 h1,h2,.logo{font-family:Bitter,Georgia,serif}
@@ -19,13 +19,17 @@ header{position:sticky;top:0;z-index:20;background:var(--brand);color:var(--on-b
 .logo{display:flex;align-items:center;gap:10px;min-width:0;font-weight:800;font-size:1rem}
 .logo img{height:36px;width:auto;flex:none}
 .logo span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.herologo1{position:absolute;right:24px;top:40%;transform:translateY(-50%);height:140px;width:auto;max-width:35%;padding:20px 20px;border-radius:12px}
-.herologo1[hidden]{display:none}
-@media (max-width:700px){.herologo1{position:static;transform:none;display:block;height:80px;max-width:100%;margin-bottom:20px}}
 .cartbtn{flex:none;background:var(--on-brand);color:#7a1f2e;border:0;border-radius:4px;padding:8px 14px;font-weight:700}
 .hero{background:var(--brand);color:var(--on-brand);padding:40px 20px 56px;position:relative;overflow:hidden}
 .hero h1{font-size:clamp(2rem,8vw,3.6rem);line-height:1.05;margin:0 0 14px;font-weight:800;max-width:11em}
-.hero p{margin:0 0 22px;max-width:30em;opacity:.92} 
+.hero p{margin:0 0 22px;max-width:30em;opacity:.92}
+.emblem{position:absolute;right:48px;top:50%;translate:0 -50%;width:min(34vw,250px);color:#fff;pointer-events:none}
+.emblem text{fill:#fff;font-family:Bitter,Georgia,serif;font-weight:800}
+.emblem .ring{font-size:15px}
+.emblem .mono{font-size:44px}
+.emblem .spin{transform-origin:100px 100px;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:700px){.emblem{width:130px;right:14px;top:18px;translate:none;opacity:.3}}
 .cta{display:inline-block;background:var(--on-brand);color:#7a1f2e;border-radius:4px;padding:12px 22px;font-weight:700;text-decoration:none}
 .pennant{position:absolute;right:-30px;bottom:-20px;width:min(46vw,260px);aspect-ratio:1.4;background:var(--on-brand);opacity:.12;clip-path:polygon(0 0,100% 50%,0 100%)}
 main{max-width:1000px;margin:0 auto;padding:32px 20px 48px}
@@ -68,7 +72,40 @@ body.open .drawer{transform:none}
 form label{display:block;margin-bottom:10px;font-size:.9rem;color:var(--muted)}
 form input{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
 .note{margin:10px 0 0;color:var(--muted);font-size:.85rem;white-space:pre-wrap}
-@media (prefers-reduced-motion:reduce){.drawer,.overlay{transition:none}}
+/* ===== дизайн и анимации ===== */
+@keyframes up{from{opacity:0;translate:0 24px}to{opacity:1;translate:0 0}}
+@keyframes pop{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
+@keyframes float{50%{translate:-14px -12px}}
+@keyframes bump{40%{scale:1.18}}
+header{box-shadow:0 2px 14px rgba(0,0,0,.18)}
+.cartbtn,.cta,.add,.pay,.chip{transition:transform .15s,box-shadow .2s,background .2s,color .2s}
+.cartbtn:hover,.cta:hover,.add:hover,.pay:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.22)}
+.cartbtn:active,.cta:active,.add:active,.pay:active{transform:scale(.97)}
+.chip:hover{background:var(--brand);color:var(--on-brand)}
+.bump{animation:bump .35s}
+.hero{background:linear-gradient(135deg,#5a1220,#7a1f2e 55%,#962e41);padding:72px 24px 88px}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.045) 0 2px,transparent 2px 22px);pointer-events:none}
+.hero::after{content:"";position:absolute;left:-90px;bottom:-130px;width:320px;height:320px;border-radius:50%;border:2px solid rgba(255,255,255,.12);animation:float 9s ease-in-out infinite reverse}
+.hero h1,.hero p,.hero .cta{position:relative;z-index:1}
+.hero h1{font-size:clamp(2.2rem,8.5vw,4.2rem);letter-spacing:-.01em;animation:up .8s .1s both}
+.hero p{font-size:1.1rem;animation:up .8s .3s both}
+.cta{border-radius:999px;padding:14px 28px;animation:up .8s .5s both}
+.emblem{animation:pop .9s .4s both}
+.pennant{opacity:.14;animation:float 7s ease-in-out infinite}
+main h2{position:relative;padding-bottom:10px}
+main h2::after{content:"";position:absolute;left:0;bottom:0;width:48px;height:4px;background:var(--brand);border-radius:2px}
+.card{opacity:0;translate:0 24px;transition:opacity .6s,translate .6s,transform .25s,box-shadow .25s,border-color .25s}
+.card.in{opacity:1;translate:0 0}
+.card:hover{transform:translateY(-6px);box-shadow:0 14px 28px rgba(122,31,46,.18);border-color:var(--brand).tile{background:linear-gradient(160deg,var(--surface),var(--bg))}
+.tile img,.tile .em{transition:transform .4s}
+.tile .em{display:inline-block}
+.card:hover .tile img{transform:scale(1.07)}
+.card:hover .tile .em{transform:scale(1.15) rotate(-4deg)}
+.add.ok{background:var(--on-brand);color:var(--brand);box-shadow:inset 0 0 0 2px var(--brand)}
+.it{animation:up .35s both}
+.overlay{backdrop-filter:blur(2px)}
+footer{background:var(--brand);color:var(--on-brand);text-align:center;padding:24px 20px;font-size:.9rem}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.card{opacity:1;translate:none}}
 </style>
 </head>
 <body>
@@ -77,9 +114,16 @@ form input{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid
   <button class="cartbtn" id="open" aria-label="Открыть корзину">Корзина · <span id="count">0</span></button>
 </header>
 
-<section class="hero"> <img class="herologo1" src="logo1.png" alt="Логотип 1">
+<section class="hero">
+  <svg class="emblem" viewBox="0 0 200 200" aria-hidden="true">
+    <defs><path id="ringpath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+    <g class="spin"><text class="ring"><textPath href="#ringpath" id="ring"></textPath></text></g>
+    <circle cx="100" cy="100" r="58" fill="none" stroke="#fff" stroke-width="2"/>
+    <circle cx="100" cy="100" r="50" fill="none" stroke="#fff" stroke-width="1" opacity=".5"/>
+    <text class="mono" id="mono" x="100" y="116" text-anchor="middle"></text>
+  </svg>
   <h1>Носите университет с гордостью</h1>
-  <p>Атрибутика университета </p>
+  <p>Атрибутика университета <span data-name></span></p>
   <a class="cta" href="#catalog">Смотреть каталог</a>
   <div class="pennant" aria-hidden="true"></div>
 </section>
@@ -91,6 +135,7 @@ form input{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid
   </div>
   <div class="grid" id="grid"></div>
 </main>
+<footer>© <span data-name></span></footer>
 
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Корзина">
@@ -109,10 +154,11 @@ form input{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid
 </aside>
 
 <script>
+/* ===== НАСТРОЙКИ: меняйте только этот блок и список товаров ===== */
 var CONFIG = {
   shopName: "TURAN-ASTANA UNIVERSITY",
-  logo: "logo.png",          
-  whatsapp: "7714929638",      
+  logo: "logo.png",          // путь к логотипу, например "logo.png" (пусто — без логотипа)
+  whatsapp: "7714929638",      // номер для заказов без плюса и пробелов, например "77011234567"
   currency: "₸"
 };
 
@@ -120,12 +166,14 @@ var CONFIG = {
    sizes — список размеров; для товаров без размера уберите эту строку.
    cat — категория: кнопки фильтра создаются автоматически. */
 var PRODUCTS = [
-  {id:1, name:"Худи с принтом логотипа", cat:"Одежда", price:15000, img:"PHOTOS.jpeg", icon:"", sizes:["S","M","L","XL"], desc:"Белая с бордовым принтом"},
+  {id:1, name:"Худи с логотипом Университета", cat:"Одежда", price:15000, img:"photos.jpg", icon:"", sizes:["S","M","L","XL"], desc:""},
   {id:2, name:"", cat:"Одежда", price:6000, img:"", icon:"", sizes:["S","M","L","XL"], desc:""},
-  {id:3, name:"", cat:"Одежда", price:5000, img:"", icon:"", desc:""},
+  {id:3, name:"", cat:"Одежда", price:5000, img:"", icon:"", sizes:["s","M","L","XL"], desc:""},
   {id:4, name:"", cat:"Аксессуары", price:3500, img:"", icon:"", desc:""},
   {id:5, name:"", cat:"Аксессуары", price:3000, img:"", icon:"", desc:""},
-  {id:6, name:"", cat:"Аксессуары", price:2000, img:"", icon:"", desc:""}
+  {id:6, name:"", cat:"Аксессуары", price:2000, img:"", icon:"", desc:""},
+  {id:7, name:"", cat:"Аксессуары", price:2000, img:"", icon:"", desc:""},
+  {id:8, name:"", cat:"Одежда", price:5000, img:"", icon:"", sizes:["s","M","L","XL"], desc:""},
 ];
 /* ===== конец настроек ===== */
 
@@ -136,7 +184,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(cart))}catch(e){}}
 function money(n){return n.toLocaleString("ru-RU")+" "+CONFIG.currency}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function prod(id){return PRODUCTS.filter(function(p){return String(p.id)===String(id)})[0]}
-function pic(p){return p.img?'<img src="'+esc(p.img)+'" alt="'+esc(p.name)+'" loading="lazy">':p.icon}
+function pic(p){return p.img?'<img src="'+esc(p.img)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span class="em">'+p.icon+'</span>'}
 
 function renderChips(){
   var cats=[];PRODUCTS.forEach(function(p){if(cats.indexOf(p.cat)<0)cats.push(p.cat)});
@@ -176,9 +224,12 @@ document.addEventListener("click",function(e){
   if(d.add){
     var sel=t.closest(".card").querySelector(".size"),k=d.add+"|"+(sel?sel.value:"");
     cart[k]=(cart[k]||0)+1;$("note").hidden=true;renderCart();
+    t.textContent="Добавлено ✓";t.classList.add("ok");
+    setTimeout(function(){t.textContent="В корзину";t.classList.remove("ok")},1000);
+    var cb=$("open");cb.classList.remove("bump");void cb.offsetWidth;cb.classList.add("bump");
   }else if(d.inc){cart[d.inc]++;renderCart()}
   else if(d.dec){if(--cart[d.dec]<=0)delete cart[d.dec];renderCart()}
-  else if(d.cat){cat=d.cat;renderChips();renderGrid()}
+  else if(d.cat){cat=d.cat;renderChips();renderGrid();reveal()}
 });
 $("open").onclick=function(){setOpen(true)};
 $("close").onclick=$("overlay").onclick=function(){setOpen(false)};
@@ -202,10 +253,29 @@ $("form").onsubmit=function(e){
   }
 };
 
-document.title="Мерч — "+CONFIG.shopName;
-document.querySelectorAll("[data-name]").forEach(function(n){n.textContent=CONFIG.shopName});
+document.title="Мерч — "+"TURAN-ASTANA UNIVERSITY";
+document.querySelectorAll("[data-name]").forEach(function(n){n.textContent="TURAN-ASTANA UNIVERSITY"});
 if(CONFIG.logo){var lg=$("logo");lg.src=CONFIG.logo;lg.hidden=false}
-renderChips();renderGrid();renderCart();
+$("mono").textContent=CONFIG.shopName.split(/[\s-]+/).slice(0,2).map(function(w){return w[0]}).join("").toUpperCase();
+function fitRing(){
+  var r=$("ring");r.removeAttribute("letter-spacing");
+  r.textContent="TURAN-ASTANA UNIVERSITY".toUpperCase()+" • ";
+  var L=r.getComputedTextLength();
+  r.setAttribute("letter-spacing",Math.max(0,(486-L)/r.textContent.length));
+}
+try{fitRing();if(document.fonts)document.fonts.ready.then(fitRing)}catch(e){}
+var io="IntersectionObserver" in window?new IntersectionObserver(function(es){
+  es.forEach(function(e){
+    if(e.isIntersecting){var t=e.target;t.classList.add("in");io.unobserve(t);setTimeout(function(){t.style.transitionDelay=""},900)}
+  });
+},{threshold:.12}):null;
+function reveal(){
+  document.querySelectorAll(".card").forEach(function(c,i){
+    c.style.transitionDelay=(i%4)*70+"ms";
+    if(io)io.observe(c);else c.classList.add("in");
+  });
+}
+renderChips();renderGrid();renderCart();reveal();
 </script>
 </body>
 </html>
