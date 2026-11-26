@@ -26,7 +26,7 @@ header{position:sticky;top:0;z-index:20;background:var(--brand);color:var(--on-b
 .emblem{position:absolute;right:48px;top:50%;translate:0 -50%;width:min(34vw,250px);color:#fff;pointer-events:none}
 .emblem text{fill:#fff;font-family:Bitter,Georgia,serif;font-weight:800}
 .emblem .ring{font-size:15px}
-.emblem .mono{font-size:44px}
+.emblem .mono{font-size:30px}
 .emblem .spin{transform-origin:100px 100px;animation:spin 40s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (max-width:700px){.emblem{width:130px;right:14px;top:18px;translate:none;opacity:.3}}
@@ -105,10 +105,41 @@ main h2::after{content:"";position:absolute;left:0;bottom:0;width:48px;height:4p
 .it{animation:up .35s both}
 .overlay{backdrop-filter:blur(2px)}
 footer{background:var(--brand);color:var(--on-brand);text-align:center;padding:24px 20px;font-size:.9rem}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.card{opacity:1;translate:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.card{opacity:1;translate:none}.splash{display:none}}
+.tile{position:relative}
+.fav{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:0;background:var(--bg);color:var(--muted);font-size:1.2rem;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:transform .2s,color .2s}
+.fav:hover{transform:scale(1.12)}
+.fav[aria-pressed="true"]{color:#c0283f;animation:bump .35s}
+.reviews{margin-top:56px}
+.avg{color:var(--muted);margin:0 0 18px}
+.stars{color:var(--price);letter-spacing:2px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:32px}
+.rc{border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:4px;padding:16px;background:var(--surface)}
+.rc p{margin:8px 0}
+.rc small{color:var(--muted)}
+.rform{max-width:480px}
+.rform h3{margin:0 0 12px}
+form textarea,form select{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:inherit}
+.splash{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#5a1220,#7a1f2e 55%,#962e41);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;animation:splashout .8s 1.8s cubic-bezier(.7,0,.2,1) both}
+@keyframes splashout{to{translate:0 -100%;opacity:0;visibility:hidden}}
+.sp-mono{font:800 3.4rem Bitter,Georgia,serif;width:130px;height:130px;border:3px solid #fff;border-radius:50%;display:grid;place-items:center;animation:pop .8s both}
+.sp-name{font:800 1.3rem Bitter,Georgia,serif;letter-spacing:.04em;text-align:center;padding:0 20px;animation:up .8s .3s both}
+.sp-bar{width:160px;height:3px;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden;position:relative}
+.sp-bar::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;animation:load 1.6s ease-in-out both}
+@keyframes load{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero h1{animation-delay:1.7s}
+.hero p{animation-delay:1.9s}
+.hero .cta{animation-delay:2.1s}
+.emblem{animation-delay:2s}
+footer{background:var(--brand);color:#fff;text-align:center;padding:24px 20px;font-size:.9rem}
 </style>
 </head>
 <body>
+  <div class="splash" id="splash">
+  <div class="sp-mono">TAU</div>
+  <div class="sp-name" data-name></div>
+  <div class="sp-bar"></div>
+</div>
 <header>
   <div class="logo"><img id="logo" alt="" hidden><span data-name></span></div>
   <button class="cartbtn" id="open" aria-label="Открыть корзину">Корзина · <span id="count">0</span></button>
@@ -120,7 +151,7 @@ footer{background:var(--brand);color:var(--on-brand);text-align:center;padding:2
     <g class="spin"><text class="ring"><textPath href="#ringpath" id="ring"></textPath></text></g>
     <circle cx="100" cy="100" r="58" fill="none" stroke="#fff" stroke-width="2"/>
     <circle cx="100" cy="100" r="50" fill="none" stroke="#fff" stroke-width="1" opacity=".5"/>
-    <text class="mono" id="mono" x="100" y="116" text-anchor="middle"></text>
+    <text class="mono" id="mono" x="100" y="111" text-anchor="middle"></text>
   </svg>
   <h1>Носите университет с гордостью</h1>
   <p>Атрибутика университета <span data-name></span></p>
@@ -134,8 +165,26 @@ footer{background:var(--brand);color:var(--on-brand);text-align:center;padding:2
     <div class="chips" id="chips"></div>
   </div>
   <div class="grid" id="grid"></div>
+  <section class="reviews" id="reviews">
+  <h2>Отзывы</h2>
+  <p class="avg" id="avg"></p>
+  <div class="rgrid" id="rgrid"></div>
+  <form id="rform" class="rform">
+    <h3>Оставить отзыв</h3>
+    <label>Имя<input name="n" required></label>
+    <label>Оценка
+      <select name="r">
+        <option value="5">★★★★★</option><option value="4">★★★★☆</option>
+        <option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option>
+      </select>
+    </label>
+    <label>Отзыв<textarea name="t" rows="3" required></textarea></label>
+    <button class="pay" type="submit">Отправить отзыв</button>
+    <p class="note" id="rnote" hidden></p>
+  </form>
+</section>
 </main>
-<footer>© <span data-name></span></footer>
+<footer>©️ <span data-name></span></footer>
 
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Корзина">
@@ -178,6 +227,9 @@ var PRODUCTS = [
 /* ===== конец настроек ===== */
 
 var KEY = "shop-cart", cart = load(), cat = "all";
+var FKEY="shop-fav", fav=loadFav();
+function loadFav(){try{return JSON.parse(localStorage.getItem(FKEY)||"[]")}catch(e){return []}}
+function saveFav(){try{localStorage.setItem(FKEY,JSON.stringify(fav))}catch(e){}}
 var $ = function(i){return document.getElementById(i)};
 function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return {}}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(cart))}catch(e){}}
@@ -185,17 +237,18 @@ function money(n){return n.toLocaleString("ru-RU")+" "+CONFIG.currency}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function prod(id){return PRODUCTS.filter(function(p){return String(p.id)===String(id)})[0]}
 function pic(p){return p.img?'<img src="'+esc(p.img)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span class="em">'+p.icon+'</span>'}
-
 function renderChips(){
   var cats=[];PRODUCTS.forEach(function(p){if(cats.indexOf(p.cat)<0)cats.push(p.cat)});
-  $("chips").innerHTML=["all"].concat(cats).map(function(c){
-    return '<button class="chip" data-cat="'+esc(c)+'" aria-pressed="'+(c===cat)+'">'+(c==="all"?"Все":esc(c))+'</button>';
+  $("chips").innerHTML=["all","fav"].concat(cats).map(function(c){
+    return '<button class="chip" data-cat="'+esc(c)+'" aria-pressed="'+(c===cat)+'">'+(c==="all"?"Все":c==="fav"?"♥ Избранное ("+fav.length+")":esc(c))+'</button>';
   }).join("");
+  var REVIEWS = [
+];
 }
 function renderGrid(){
-  $("grid").innerHTML=PRODUCTS.filter(function(p){return cat==="all"||p.cat===cat}).map(function(p){
+  $("grid").innerHTML=PRODUCTS.filter(function(p){return cat==="all"||(cat==="fav"?fav.indexOf(p.id)>-1:p.cat===cat)}).map(function(p){
     var sz=p.sizes?'<select class="size" aria-label="Размер">'+p.sizes.map(function(s){return '<option>'+esc(s)+'</option>'}).join("")+'</select>':"";
-    return '<article class="card"><div class="tile">'+pic(p)+'</div><div class="info"><h3>'+esc(p.name)+'</h3><p>'+esc(p.desc||"")+'</p>'+sz+'<div class="row"><span class="price">'+money(p.price)+'</span><button class="add" data-add="'+p.id+'">В корзину</button></div></div></article>';
+    return '<article class="card"><div class="tile">'+pic(p)+'<button class="fav" data-fav="'+p.id+'" aria-label="В избранное" aria-pressed="'+(fav.indexOf(p.id)>-1)+'">♥</button></div><div class="info"><h3>'+esc(p.name)+'</h3><p>'+esc(p.desc||"")+'</p>'+sz+'<div class="row"><span class="price">'+money(p.price)+'</span><button class="add" data-add="'+p.id+'">В корзину</button></div></div></article>';
   }).join("");
 }
 function lines(){
@@ -230,6 +283,12 @@ document.addEventListener("click",function(e){
   }else if(d.inc){cart[d.inc]++;renderCart()}
   else if(d.dec){if(--cart[d.dec]<=0)delete cart[d.dec];renderCart()}
   else if(d.cat){cat=d.cat;renderChips();renderGrid();reveal()}
+  else if(d.fav){
+  var id=Number(d.fav),i=fav.indexOf(id);
+  if(i<0)fav.push(id);else fav.splice(i,1);
+  saveFav();renderChips();
+  if(cat==="fav"){renderGrid();reveal()}else t.setAttribute("aria-pressed",i<0);
+}
 });
 $("open").onclick=function(){setOpen(true)};
 $("close").onclick=$("overlay").onclick=function(){setOpen(false)};
@@ -256,7 +315,7 @@ $("form").onsubmit=function(e){
 document.title="Мерч — "+"TURAN-ASTANA UNIVERSITY";
 document.querySelectorAll("[data-name]").forEach(function(n){n.textContent="TURAN-ASTANA UNIVERSITY"});
 if(CONFIG.logo){var lg=$("logo");lg.src=CONFIG.logo;lg.hidden=false}
-$("mono").textContent=CONFIG.shopName.split(/[\s-]+/).slice(0,2).map(function(w){return w[0]}).join("").toUpperCase();
+$("mono").textContent="TAU";
 function fitRing(){
   var r=$("ring");r.removeAttribute("letter-spacing");
   r.textContent="TURAN-ASTANA UNIVERSITY".toUpperCase()+" • ";
@@ -275,7 +334,28 @@ function reveal(){
     if(io)io.observe(c);else c.classList.add("in");
   });
 }
-renderChips();renderGrid();renderCart();reveal();
+function stars(n){return "★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n)}
+function renderReviews(){
+  var n=REVIEWS.length,avg=n?(REVIEWS.reduce(function(s,r){return s+r.rating},0)/n).toFixed(1):"";
+  $("avg").innerHTML=n?'<span class="stars">'+stars(Math.round(avg))+'</span> '+avg+' · отзывов: '+n:"Пока нет отзывов. Будьте первым!";
+  $("rgrid").innerHTML=REVIEWS.map(function(r){
+    return '<article class="rc"><span class="stars">'+stars(r.rating)+'</span><p>'+esc(r.text)+'</p><small>'+esc(r.name)+(r.date?" · "+esc(r.date):"")+'</small></article>';
+  }).join("");
+}
+$("rform").onsubmit=function(e){
+  e.preventDefault();
+  var f=e.target,note=$("rnote");
+  var msg="Новый отзыв для магазина «"+CONFIG.shopName+"»:\nИмя: "+f.n.value+"\nОценка: "+f.r.value+"/5\nОтзыв: "+f.t.value;
+  note.hidden=false;
+  if(CONFIG.whatsapp){
+    window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(msg),"_blank");
+    f.reset();
+    note.textContent="Спасибо! Отправьте сообщение в WhatsApp, и отзыв будет передан на проверку.";
+  }else{
+    note.textContent="Укажите номер WhatsApp в настройках (CONFIG.whatsapp). Текст отзыва:\n\n"+msg;
+  }
+};
+renderChips();renderGrid();renderCart();reveal();renderReviews();
 </script>
 </body>
 </html>
