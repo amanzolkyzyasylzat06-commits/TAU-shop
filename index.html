@@ -96,7 +96,8 @@ main h2{position:relative;padding-bottom:10px}
 main h2::after{content:"";position:absolute;left:0;bottom:0;width:48px;height:4px;background:var(--brand);border-radius:2px}
 .card{opacity:0;translate:0 24px;transition:opacity .6s,translate .6s,transform .25s,box-shadow .25s,border-color .25s}
 .card.in{opacity:1;translate:0 0}
-.card:hover{transform:translateY(-6px);box-shadow:0 14px 28px rgba(122,31,46,.18);border-color:var(--brand).tile{background:linear-gradient(160deg,var(--surface),var(--bg))}
+.card:hover{transform:translateY(-6px);box-shadow:0 14px 28px rgba(122,31,46,.18);border-color:var(--brand)}
+.tile{background:linear-gradient(160deg,var(--surface),var(--bg))}
 .tile img,.tile .em{transition:transform .4s}
 .tile .em{display:inline-block}
 .card:hover .tile img{transform:scale(1.07)}
@@ -104,7 +105,7 @@ main h2::after{content:"";position:absolute;left:0;bottom:0;width:48px;height:4p
 .add.ok{background:var(--on-brand);color:var(--brand);box-shadow:inset 0 0 0 2px var(--brand)}
 .it{animation:up .35s both}
 .overlay{backdrop-filter:blur(2px)}
-footer{background:var(--brand);color:var(--on-brand);text-align:center;padding:24px 20px;font-size:.9rem}}
+footer{background:var(--brand);color:var(--on-brand);text-align:center;padding:24px 20px;font-size:.9rem}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.card{opacity:1;translate:none}.splash{display:none}}
 .tile{position:relative}
 .fav{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:0;background:var(--bg);color:var(--muted);font-size:1.2rem;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:transform .2s,color .2s}
@@ -131,7 +132,45 @@ form textarea,form select{display:block;width:100%;margin-top:4px;padding:10px;b
 .hero p{animation-delay:1.9s}
 .hero .cta{animation-delay:2.1s}
 .emblem{animation-delay:2s}
-footer{background:var(--brand);color:#fff;text-align:center;padding:24px 20px;font-size:.9rem}
+footer{background:#3b0c15;color:#fff;padding:0;font-size:.95rem}
+.ft{max-width:1000px;margin:0 auto;padding:48px 20px 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px}
+.ft h4{margin:0 0 14px;font:800 1.05rem Bitter,Georgia,serif}
+.ft a{display:block;color:rgba(255,255,255,.8);text-decoration:none;padding:4px 0;transition:color .2s,translate .2s}
+.ft a:hover{color:#fff;translate:4px 0}
+.ft p{margin:0 0 6px;color:rgba(255,255,255,.8)}
+.soc{display:flex;gap:10px;margin-top:14px}
+.ft .soc a{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:grid;place-items:center;font-size:.75rem;font-weight:700;padding:0;color:#fff}
+.ft .soc a:hover{background:#fff;color:#7a1f2e;translate:0 -3px}
+.fb{border-top:1px solid rgba(255,255,255,.15);padding:18px 20px;text-align:center;font-size:.85rem;color:rgba(255,255,255,.7)}
+.lang{display:flex;gap:2px;margin-left:auto}
+.lang button{background:none;border:0;color:rgba(255,255,255,.7);font-weight:700;font-size:.85rem;padding:6px 8px;border-radius:4px}
+.lang button:hover{color:#fff}
+.lang button[aria-pressed="true"]{color:#fff;background:rgba(255,255,255,.18)}
+.soc svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ai-fab{position:fixed;left:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:35;width:60px;height:60px;border-radius:50%;border:0;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(122,31,46,.4);transition:transform .2s;animation:pop .6s 2.2s both,pulse 3s 3.2s infinite}
+.ai-fab:hover{transform:scale(1.08)}
+.ai-fab svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@keyframes pulse{50%{box-shadow:0 8px 24px rgba(122,31,46,.4),0 0 0 12px rgba(122,31,46,.12)}}
+.ai{position:fixed;left:20px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:35;width:min(380px,calc(100vw - 40px));height:min(520px,calc(100vh - 140px));display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.28);animation:up .3s both}
+.ai[hidden]{display:none}
+.ai-h{background:var(--brand);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.ai-h small{display:block;opacity:.85;font-size:.8rem}
+.ai-x{background:rgba(255,255,255,.2);border:0;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1.2rem;line-height:1}
+.ai-m{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;font-size:.95rem;animation:up .25s both}
+.msg.bot{background:var(--brand);color:#fff;border-bottom-left-radius:4px;align-self:flex-start}
+.msg.me{background:var(--surface);border:1px solid var(--line);border-bottom-right-radius:4px;align-self:flex-end}
+.dots span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#fff;animation:blink 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}
+.dots span:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.ai-q{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}
+.ai-q button{border:1.5px solid var(--brand);background:transparent;color:var(--ink);border-radius:999px;padding:4px 12px;font-size:.85rem}
+.ai-q button:hover{background:var(--brand);color:#fff}
+.ai-f{display:flex;gap:8px;padding:10px 14px 2px}
+.ai-f input{margin:0;flex:1;border-radius:999px;padding:10px 14px}
+.ai-f button{width:44px;border:0;border-radius:12px;background:var(--brand);color:#fff;font-size:1.1rem}
+.ai-c{text-align:right;padding:0 16px 8px;color:var(--muted);font-size:.75rem}
 </style>
 </head>
 <body>
@@ -142,6 +181,9 @@ footer{background:var(--brand);color:#fff;text-align:center;padding:24px 20px;fo
 </div>
 <header>
   <div class="logo"><img id="logo" alt="" hidden><span data-name></span></div>
+  <div class="lang" id="lang">
+  <button data-lang="kk">ҚАЗ</button><button data-lang="ru">РУС</button><button data-lang="en">ENG</button>
+</div>
   <button class="cartbtn" id="open" aria-label="Открыть корзину">Корзина · <span id="count">0</span></button>
 </header>
 
@@ -184,8 +226,49 @@ footer{background:var(--brand);color:#fff;text-align:center;padding:24px 20px;fo
   </form>
 </section>
 </main>
-<footer>©️ <span data-name></span></footer>
-
+<footer>
+  <div class="ft">
+    <div>
+      <h4>Магазин</h4>
+      <a href="#catalog">Каталог</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#" id="ftcart">Корзина</a>
+    </div>
+    <div>
+      <h4>Помощь</h4>
+      <a href="#">Как заказать</a>
+      <a href="#">Оплата</a>
+      <a href="#">Доставка</a>
+      <a href="#">Возврат и обмен</a>
+    </div>
+    <div>
+      <h4>Университет</h4>
+      <a href="https://ВАШ-САЙТ.kz" target="_blank" rel="noopener">Сайт университета</a>
+      <a href="#">О нас</a>
+    </div>
+    <div>
+      <h4>Контакты</h4>
+      <p>г. Астана, улица Ыкылас Дукенулы, 29 </p>
+      <p>+7 778 867 35 04 </p>
+      <p>info@tau-edu.kz</p>
+     <div class="soc">
+  <a href="https://www.instagram.com/tau_edu.kz/" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <a href="https://t.me/tau_admission_bot" target="_blank" rel="noopener" aria-label="Telegram">
+    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+  </a>
+  <a href="https://wa.me/7076242375" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><path d="M9.2 8.5c.3 1.9 2.6 4.6 5.1 5.4l1.3-1.2-1.7-1.1-.9.6c-.9-.4-1.6-1.1-2-2l.6-.9-1.1-1.7-1.3 1z" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <a href="https://www.youtube.com/channel/UCqnRq2ISMcTG7HF60n0LXdA" target="_blank" rel="noopener" aria-label="YouTube">
+    <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+  </a>
+</div>
+    </div>
+  </div>
+  <div class="fb">© 2026 <span data-name></span>. Все права защищены.</div>
+</footer>
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer" aria-label="Корзина">
   <div class="dh"><h2>Ваш заказ</h2><button class="x" id="close" aria-label="Закрыть корзину">×</button></div>
@@ -201,7 +284,22 @@ footer{background:var(--brand);color:#fff;text-align:center;padding:24px 20px;fo
     <p class="note" id="note" hidden></p>
   </div>
 </aside>
-
+<button class="ai-fab" id="aiFab" aria-label="AI" aria-expanded="false">
+  <svg viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="11" rx="3"/><circle cx="9.5" cy="13" r="1.4" fill="currentColor" stroke="none"/><circle cx="14.5" cy="13" r="1.4" fill="currentColor" stroke="none"/><path d="M12 8V5M10 5h4M9.5 16.5h5"/></svg>
+</button>
+<section class="ai" id="ai" hidden aria-label="TAU AI">
+  <div class="ai-h">
+    <div><b>TAU AI</b><small id="aiOn"></small></div>
+    <button class="ai-x" id="aiX" aria-label="×">×</button>
+  </div>
+  <div class="ai-m" id="aiM"></div>
+  <div class="ai-q" id="aiQ"></div>
+  <form class="ai-f" id="aiF">
+    <input id="aiI" maxlength="1000" autocomplete="off">
+    <button type="submit" aria-label="➤">➤</button>
+  </form>
+  <small class="ai-c" id="aiC">0/1000</small>
+</section>
 <script>
 /* ===== НАСТРОЙКИ: меняйте только этот блок и список товаров ===== */
 var CONFIG = {
@@ -224,6 +322,7 @@ var PRODUCTS = [
   {id:7, name:"", cat:"Аксессуары", price:2000, img:"", icon:"", desc:""},
   {id:8, name:"", cat:"Одежда", price:5000, img:"", icon:"", sizes:["s","M","L","XL"], desc:""},
 ];
+var REVIEWS = [];
 /* ===== конец настроек ===== */
 
 var KEY = "shop-cart", cart = load(), cat = "all";
@@ -242,8 +341,6 @@ function renderChips(){
   $("chips").innerHTML=["all","fav"].concat(cats).map(function(c){
     return '<button class="chip" data-cat="'+esc(c)+'" aria-pressed="'+(c===cat)+'">'+(c==="all"?"Все":c==="fav"?"♥ Избранное ("+fav.length+")":esc(c))+'</button>';
   }).join("");
-  var REVIEWS = [
-];
 }
 function renderGrid(){
   $("grid").innerHTML=PRODUCTS.filter(function(p){return cat==="all"||(cat==="fav"?fav.indexOf(p.id)>-1:p.cat===cat)}).map(function(p){
@@ -356,6 +453,187 @@ $("rform").onsubmit=function(e){
   }
 };
 renderChips();renderGrid();renderCart();reveal();renderReviews();
+/* ===== ПЕРЕВОДЫ: слева русский текст ровно как на сайте ===== */
+var LANG="ru";try{LANG=localStorage.getItem("shop-lang")||"ru"}catch(e){}
+var DICT={
+ "Корзина ·":{kk:"Себет ·",en:"Cart ·"},
+ "Носите университет с гордостью":{kk:"Университетті мақтанышпен киіңіз",en:"Wear your university with pride"},
+ "Атрибутика университета в фирменных бордовом и белом цветах.":{kk:"Университет атрибутикасы фирмалық бордо және ақ түстерде.",en:"University merchandise in our signature burgundy and white."},
+ "Смотреть каталог":{kk:"Каталогты қарау",en:"Browse catalog"},
+ "Каталог":{kk:"Каталог",en:"Catalog"},
+ "Все":{kk:"Барлығы",en:"All"},
+ "Одежда":{kk:"Киім",en:"Clothing"},
+ "Аксессуары":{kk:"Аксессуарлар",en:"Accessories"},
+ "В корзину":{kk:"Себетке",en:"Add to cart"},
+ "Добавлено ✓":{kk:"Қосылды ✓",en:"Added ✓"},
+ "Ваш заказ":{kk:"Сіздің тапсырысыңыз",en:"Your order"},
+ "Корзина пуста. Добавьте что-нибудь из каталога.":{kk:"Себет бос. Каталогтан бірдеңе қосыңыз.",en:"Your cart is empty. Add something from the catalog."},
+ "Итого":{kk:"Барлығы",en:"Total"},
+ "Оформить заказ":{kk:"Тапсырыс беру",en:"Checkout"},
+ "Имя":{kk:"Аты-жөні",en:"Name"},
+ "Телефон":{kk:"Телефон",en:"Phone"},
+ "Отправить заказ в WhatsApp":{kk:"Тапсырысты WhatsApp-қа жіберу",en:"Send order via WhatsApp"},
+ "Заказ открыт в WhatsApp. Отправьте сообщение, чтобы завершить оформление.":{kk:"Тапсырыс WhatsApp-та ашылды. Рәсімдеуді аяқтау үшін хабарламаны жіберіңіз.",en:"Your order is open in WhatsApp. Send the message to complete it."},
+ "Отзывы":{kk:"Пікірлер",en:"Reviews"},
+ "Оставить отзыв":{kk:"Пікір қалдыру",en:"Leave a review"},
+ "Оценка":{kk:"Баға",en:"Rating"},
+ "Отзыв":{kk:"Пікір",en:"Review"},
+ "Отправить отзыв":{kk:"Пікірді жіберу",en:"Send review"},
+ "Пока нет отзывов. Будьте первым!":{kk:"Әзірге пікір жоқ. Бірінші болыңыз!",en:"No reviews yet. Be the first!"},
+ "Спасибо! Отправьте сообщение в WhatsApp, и отзыв будет передан на проверку.":{kk:"Рақмет! WhatsApp-та хабарламаны жіберіңіз, пікір тексеруге жіберіледі.",en:"Thank you! Send the message in WhatsApp and your review will be sent for moderation."},
+ /* подвал */
+ "Магазин":{kk:"Дүкен",en:"Shop"},
+ "Корзина":{kk:"Себет",en:"Cart"},
+ "Помощь":{kk:"Көмек",en:"Help"},
+ "Как заказать":{kk:"Қалай тапсырыс беруге болады",en:"How to order"},
+ "Оплата":{kk:"Төлем",en:"Payment"},
+ "Доставка":{kk:"Жеткізу",en:"Delivery"},
+ "Возврат и обмен":{kk:"Қайтару және айырбастау",en:"Returns and exchanges"},
+ "Университет":{kk:"Университет",en:"University"},
+ "Сайт университета":{kk:"Университет сайты",en:"University website"},
+ "О нас":{kk:"Біз туралы",en:"About us"},
+ "Контакты":{kk:"Байланыс",en:"Contacts"},
+ ". Все права защищены.":{kk:". Барлық құқықтар қорғалған.",en:". All rights reserved."},
+ /* товары: добавляйте сюда названия и описания своих товаров */
+ "Худи с вышитым гербом":{kk:"Елтаңбасы кестелі худи",en:"Hoodie with embroidered crest"},
+ "Плотный футер, бордовое с белой вышивкой":{kk:"Тығыз футер, ақ кестелі бордо түсті",en:"Heavy fleece, burgundy with white embroidery"},
+ "Футболка с логотипом":{kk:"Логотипті футболка",en:"T-shirt with logo"},
+ "Хлопок, белая с бордовым принтом":{kk:"Мақта, бордо принтті ақ түсті",en:"Cotton, white with burgundy print"},
+ "Бейсболка":{kk:"Бейсболка",en:"Baseball cap"},
+ "Регулируемая застёжка":{kk:"Реттелетін бекіткіш",en:"Adjustable strap"},
+ "Шоппер":{kk:"Шоппер",en:"Tote bag"},
+ "Плотный хлопок, влезает ноутбук":{kk:"Тығыз мақта, ноутбук сияды",en:"Heavy cotton, fits a laptop"},
+ "Кружка":{kk:"Кружка",en:"Mug"},
+ "Керамика, 350 мл":{kk:"Керамика, 350 мл",en:"Ceramic, 350 ml"},
+ "Блокнот А5":{kk:"А5 блокнот",en:"A5 notebook"},
+ "Бордовая обложка, 80 листов":{kk:"Бордо мұқаба, 80 парақ",en:"Burgundy cover, 80 pages"}
+};
+var PAT=[
+ [/^♥ Избранное \((\d+)\)$/,{kk:"♥ Таңдаулылар ($1)",en:"♥ Favorites ($1)"}],
+ [/^Размер: (.+)$/,{kk:"Өлшемі: $1",en:"Size: $1"}],
+ [/^([\d.]+) · отзывов: (\d+)$/,{kk:"$1 · пікір: $2",en:"$1 · reviews: $2"}]
+];
+
+var orig=new WeakMap();
+function trans(s){
+  var k=s.trim(),d=DICT[k];
+  if(d)return d[LANG]||null;
+  for(var i=0;i<PAT.length;i++){
+    var m=k.match(PAT[i][0]);
+    if(m&&PAT[i][1][LANG])return PAT[i][1][LANG].replace(/\$(\d)/g,function(_,n){return m[n]});
+  }
+  return null;
+}
+function tr(node){
+  var had=orig.has(node),s=had?orig.get(node):node.nodeValue;
+  if(LANG==="ru"){if(had&&node.nodeValue!==s)node.nodeValue=s;return}
+  var r=trans(s);if(r===null)return;
+  if(!had)orig.set(node,s);
+  var out=s.replace(s.trim(),function(){return r});
+  if(node.nodeValue!==out)node.nodeValue=out;
+}
+function walk(root){
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,list=[];
+  while(n=w.nextNode()){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName))list.push(n)}
+  list.forEach(tr);
+}
+function setLang(l){
+  LANG=l;try{localStorage.setItem("shop-lang",l)}catch(e){}
+  document.documentElement.lang=l;
+  document.querySelectorAll("#lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.lang===l)});
+  walk(document.body);
+}
+new MutationObserver(function(ms){
+  ms.forEach(function(m){m.addedNodes.forEach(function(a){a.nodeType===3?tr(a):walk(a)})});
+}).observe(document.body,{childList:true,subtree:true});
+$("lang").onclick=function(e){var b=e.target.closest("button");if(b)setLang(b.dataset.lang)};
+setLang(LANG);
+/* ===== ИИ-помощник ===== */
+var AI={
+  online:{ru:"Онлайн",kk:"Онлайн",en:"Online"},
+  ph:{ru:"Введите сообщение…",kk:"Хабарлама жазыңыз…",en:"Type a message…"},
+  hi:{ru:"👋 Здравствуйте! Я помощник магазина.\n\nМогу подсказать про:\n• заказ\n• доставку и оплату\n• размеры\n• контакты\n\nНапишите ваш вопрос 🙂",
+      kk:"👋 Сәлеметсіз бе! Мен дүкен көмекшісімін.\n\nМына тақырыптар бойынша көмектесе аламын:\n• тапсырыс\n• жеткізу және төлем\n• өлшемдер\n• байланыс\n\nСұрағыңызды жазыңыз 🙂",
+      en:"👋 Hello! I'm the store assistant.\n\nI can help with:\n• ordering\n• delivery and payment\n• sizes\n• contacts\n\nType your question 🙂"},
+  none:{ru:"Точного ответа у меня нет. Напишите нам в WhatsApp, и сотрудник поможет.",
+        kk:"Нақты жауап таба алмадым. WhatsApp-қа жазыңыз, қызметкер көмектеседі.",
+        en:"I couldn't find an exact answer. Message us on WhatsApp and a team member will help."},
+  chips:[{ru:"Как заказать?",kk:"Қалай тапсырыс беремін?",en:"How to order?"},
+         {ru:"Доставка",kk:"Жеткізу",en:"Delivery"},
+         {ru:"Оплата",kk:"Төлем",en:"Payment"},
+         {ru:"Контакты",kk:"Байланыс",en:"Contacts"}]
+};
+/* Вопросы и ответы. k — слова, по которым ищем (маленькими буквами), a — ответ на трёх языках.
+   Тексты про доставку и оплату впишите свои вместо ВПИШИТЕ. */
+var FAQ=[
+ {k:["заказ","оформ","купить","корзин","order","buy","cart","тапсырыс","себет"],
+  a:{ru:"Выберите товар, нажмите «В корзину», затем откройте корзину и нажмите «Оформить заказ». Заказ откроется в WhatsApp, останется отправить сообщение.",
+     kk:"Тауарды таңдап, «Себетке» батырмасын басыңыз, сосын себетті ашып «Тапсырыс беру» дегенді басыңыз. Тапсырыс WhatsApp-та ашылады, хабарламаны жіберсеңіз болғаны.",
+     en:"Pick an item, tap “Add to cart”, open the cart and tap “Checkout”. Your order opens in WhatsApp, and you just send the message."}},
+ {k:["доставк","привез","deliver","shipping","жеткіз"],
+  a:{ru:"ВПИШИТЕ: условия и сроки доставки.",kk:"ЖАЗЫҢЫЗ: жеткізу шарттары мен мерзімі.",en:"FILL IN: delivery terms and timing."}},
+ {k:["оплат","цена","стоим","pay","price","cost","төлем","баға"],
+  a:{ru:"ВПИШИТЕ: способы оплаты.",kk:"ЖАЗЫҢЫЗ: төлем тәсілдері.",en:"FILL IN: payment methods."}},
+ {k:["размер","size","өлшем"],
+  a:{ru:"Размер выбирается в карточке товара перед добавлением в корзину.",
+     kk:"Өлшемді себетке қосар алдында тауар карточкасында таңдайсыз.",
+     en:"Choose the size on the product card before adding it to the cart."}},
+ {k:["контакт","телефон","адрес","связ","почт","phone","address","contact","email","байланыс","мекенжай"],
+  a:{ru:"г. Астана, улица Ыкылас Дукенулы, 29\n+7 778 867 35 04\ninfo@tau-edu.kz",
+     kk:"Астана қ., Ықылас Дүкенұлы көшесі, 29\n+7 778 867 35 04\ninfo@tau-edu.kz",
+     en:"Astana, Ykylas Dukenuly St., 29\n+7 778 867 35 04\ninfo@tau-edu.kz"}}
+];
+
+function aiL(o){return o[LANG]||o.ru}
+function aiScroll(){$("aiM").scrollTop=$("aiM").scrollHeight}
+function aiAdd(text,cls){
+  var m=document.createElement("div");m.className="msg "+cls;
+  m.textContent=cls==="me"?text+"\u200b":text; /* \u200b не даёт переводчику сайта менять сообщения пользователя */
+  $("aiM").appendChild(m);aiScroll();return m;
+}
+function aiAsk(q){
+  aiAdd(q,"me");
+  var d=aiAdd("","bot");
+  d.innerHTML='<span class="dots"><span></span><span></span><span></span></span>';
+  if(CONFIG.aiUrl){ /* необязательно: адрес вашего сервера с настоящим ИИ */
+    fetch(CONFIG.aiUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:q,lang:LANG})})
+      .then(function(r){return r.json()})
+      .then(function(j){d.textContent=j.reply;aiScroll()})
+      .catch(function(){d.textContent=aiL(AI.none)});
+    return;
+  }
+  var s=q.toLowerCase(),best=null,hit=0;
+  FAQ.forEach(function(f){
+    var n=f.k.filter(function(w){return s.indexOf(w)>-1}).length;
+    if(n>hit){hit=n;best=f}
+  });
+  setTimeout(function(){d.textContent=aiL(best?best.a:AI.none);aiScroll()},700);
+}
+function aiLang(){
+  $("aiOn").textContent=aiL(AI.online);
+  $("aiI").placeholder=aiL(AI.ph);
+  $("aiQ").innerHTML=AI.chips.map(function(c){return '<button type="button">'+esc(aiL(c))+'</button>'}).join("");
+}
+function aiOpen(v){
+  $("ai").hidden=!v;$("aiFab").setAttribute("aria-expanded",v);
+  if(v){
+    aiLang();
+    if(!$("aiM").children.length)aiAdd(aiL(AI.hi),"bot");
+    $("aiI").focus();
+  }
+}
+$("aiFab").onclick=function(){aiOpen($("ai").hidden)};
+$("aiX").onclick=function(){aiOpen(false)};
+$("aiQ").onclick=function(e){var b=e.target.closest("button");if(b)aiAsk(b.textContent)};
+$("aiI").oninput=function(){$("aiC").textContent=this.value.length+"/1000"};
+$("aiF").onsubmit=function(e){
+  e.preventDefault();
+  var v=$("aiI").value.trim();if(!v)return;
+  $("aiI").value="";$("aiC").textContent="0/1000";aiAsk(v);
+};
+var _setLang=setLang;
+setLang=function(l){_setLang(l);aiLang()};
+aiLang();
 </script>
 </body>
 </html>
