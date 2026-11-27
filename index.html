@@ -1,639 +1,303 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Мерч университета</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;800&display=swap">
-<style>
-:root{--bg:#fff;--surface:#f7f1f2;--ink:#2a1318;--muted:#6b5459;--brand:#7a1f2e;--on-brand:#fff;--line:#e6d8da;--price:#7a1f2e;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#170c0f;--surface:#241318;--ink:#f7eeef;--muted:#b9a2a6;--brand:#8e2a3b;--line:#3a2328;--price:#e48e9d;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#170c0f;--surface:#241318;--ink:#f7eeef;--muted:#b9a2a6;--brand:#8e2a3b;--line:#3a2328;--price:#e48e9d;color-scheme:dark}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-h1,h2,.logo{font-family:Bitter,Georgia,serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-:focus-visible{outline:3px solid var(--price);outline-offset:2px}
-header{position:sticky;top:0;z-index:20;background:var(--brand);color:var(--on-brand);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px}
-.logo{display:flex;align-items:center;gap:10px;min-width:0;font-weight:800;font-size:1rem}
-.logo img{height:36px;width:auto;flex:none}
-.logo span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cartbtn{flex:none;background:var(--on-brand);color:#7a1f2e;border:0;border-radius:4px;padding:8px 14px;font-weight:700}
-.hero{background:var(--brand);color:var(--on-brand);padding:40px 20px 56px;position:relative;overflow:hidden}
-.hero h1{font-size:clamp(2rem,8vw,3.6rem);line-height:1.05;margin:0 0 14px;font-weight:800;max-width:11em}
-.hero p{margin:0 0 22px;max-width:30em;opacity:.92}
-.emblem{position:absolute;right:48px;top:50%;translate:0 -50%;width:min(34vw,250px);color:#fff;pointer-events:none}
-.emblem text{fill:#fff;font-family:Bitter,Georgia,serif;font-weight:800}
-.emblem .ring{font-size:15px}
-.emblem .mono{font-size:30px}
-.emblem .spin{transform-origin:100px 100px;animation:spin 40s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@media (max-width:700px){.emblem{width:130px;right:14px;top:18px;translate:none;opacity:.3}}
-.cta{display:inline-block;background:var(--on-brand);color:#7a1f2e;border-radius:4px;padding:12px 22px;font-weight:700;text-decoration:none}
-.pennant{position:absolute;right:-30px;bottom:-20px;width:min(46vw,260px);aspect-ratio:1.4;background:var(--on-brand);opacity:.12;clip-path:polygon(0 0,100% 50%,0 100%)}
-main{max-width:1000px;margin:0 auto;padding:32px 20px 48px}
-.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:20px}
-h2{margin:0;font-size:1.6rem}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1.5px solid var(--brand);background:transparent;color:var(--ink);border-radius:999px;padding:6px 14px}
-.chip[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
-.card{border:1px solid var(--line);border-radius:4px;overflow:hidden;display:flex;flex-direction:column;background:var(--bg)}
-.tile{aspect-ratio:1;display:grid;place-items:center;font-size:4.5rem;background:var(--surface);border-bottom:4px solid var(--brand);overflow:hidden}
-.tile img{width:100%;height:100%;object-fit:cover}
-.info{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
-.info h3{margin:0;font-size:1.02rem}
-.info p{margin:0;color:var(--muted);font-size:.9rem;flex:1}
-.size{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:4px;padding:6px 8px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}
-.price{font-weight:800;color:var(--price)}
-.add{background:var(--brand);color:var(--on-brand);border:0;border-radius:4px;padding:8px 12px;font-weight:600}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);color:var(--ink);z-index:50;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
-body.open .overlay{opacity:1;pointer-events:auto}
-body.open .drawer{transform:none}
-.dh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
-.dh h2{font-size:1.2rem}
-.x{background:none;border:0;color:var(--ink);font-size:1.6rem;line-height:1}
-.items{flex:1;overflow-y:auto;padding:8px 20px}
-.empty{color:var(--muted);padding:24px 0}
-.it{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
-.it .ic{width:48px;height:48px;display:grid;place-items:center;font-size:1.8rem;background:var(--surface);border-radius:4px;overflow:hidden}
-.it .ic img{width:100%;height:100%;object-fit:cover}
-.it b{display:block;font-size:.95rem}
-.it small{color:var(--muted)}
-.qty{display:flex;align-items:center;gap:8px}
-.qty button{width:28px;height:28px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:4px}
-.foot{padding:16px 20px calc(16px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
-.total{display:flex;justify-content:space-between;font-weight:800;margin-bottom:12px}
-.pay{width:100%;background:var(--brand);color:var(--on-brand);border:0;border-radius:4px;padding:12px;font-weight:700}
-.pay:disabled{opacity:.5;cursor:not-allowed}
-form label{display:block;margin-bottom:10px;font-size:.9rem;color:var(--muted)}
-form input{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
-.note{margin:10px 0 0;color:var(--muted);font-size:.85rem;white-space:pre-wrap}
-/* ===== дизайн и анимации ===== */
-@keyframes up{from{opacity:0;translate:0 24px}to{opacity:1;translate:0 0}}
-@keyframes pop{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
-@keyframes float{50%{translate:-14px -12px}}
-@keyframes bump{40%{scale:1.18}}
-header{box-shadow:0 2px 14px rgba(0,0,0,.18)}
-.cartbtn,.cta,.add,.pay,.chip{transition:transform .15s,box-shadow .2s,background .2s,color .2s}
-.cartbtn:hover,.cta:hover,.add:hover,.pay:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.22)}
-.cartbtn:active,.cta:active,.add:active,.pay:active{transform:scale(.97)}
-.chip:hover{background:var(--brand);color:var(--on-brand)}
-.bump{animation:bump .35s}
-.hero{background:linear-gradient(135deg,#5a1220,#7a1f2e 55%,#962e41);padding:72px 24px 88px}
-.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.045) 0 2px,transparent 2px 22px);pointer-events:none}
-.hero::after{content:"";position:absolute;left:-90px;bottom:-130px;width:320px;height:320px;border-radius:50%;border:2px solid rgba(255,255,255,.12);animation:float 9s ease-in-out infinite reverse}
-.hero h1,.hero p,.hero .cta{position:relative;z-index:1}
-.hero h1{font-size:clamp(2.2rem,8.5vw,4.2rem);letter-spacing:-.01em;animation:up .8s .1s both}
-.hero p{font-size:1.1rem;animation:up .8s .3s both}
-.cta{border-radius:999px;padding:14px 28px;animation:up .8s .5s both}
-.emblem{animation:pop .9s .4s both}
-.pennant{opacity:.14;animation:float 7s ease-in-out infinite}
-main h2{position:relative;padding-bottom:10px}
-main h2::after{content:"";position:absolute;left:0;bottom:0;width:48px;height:4px;background:var(--brand);border-radius:2px}
-.card{opacity:0;translate:0 24px;transition:opacity .6s,translate .6s,transform .25s,box-shadow .25s,border-color .25s}
-.card.in{opacity:1;translate:0 0}
-.card:hover{transform:translateY(-6px);box-shadow:0 14px 28px rgba(122,31,46,.18);border-color:var(--brand)}
-.tile{background:linear-gradient(160deg,var(--surface),var(--bg))}
-.tile img,.tile .em{transition:transform .4s}
-.tile .em{display:inline-block}
-.card:hover .tile img{transform:scale(1.07)}
-.card:hover .tile .em{transform:scale(1.15) rotate(-4deg)}
-.add.ok{background:var(--on-brand);color:var(--brand);box-shadow:inset 0 0 0 2px var(--brand)}
-.it{animation:up .35s both}
-.overlay{backdrop-filter:blur(2px)}
-footer{background:var(--brand);color:var(--on-brand);text-align:center;padding:24px 20px;font-size:.9rem}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.card{opacity:1;translate:none}.splash{display:none}}
-.tile{position:relative}
-.fav{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:0;background:var(--bg);color:var(--muted);font-size:1.2rem;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:transform .2s,color .2s}
-.fav:hover{transform:scale(1.12)}
-.fav[aria-pressed="true"]{color:#c0283f;animation:bump .35s}
-.reviews{margin-top:56px}
-.avg{color:var(--muted);margin:0 0 18px}
-.stars{color:var(--price);letter-spacing:2px}
-.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:32px}
-.rc{border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:4px;padding:16px;background:var(--surface)}
-.rc p{margin:8px 0}
-.rc small{color:var(--muted)}
-.rform{max-width:480px}
-.rform h3{margin:0 0 12px}
-form textarea,form select{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font:inherit}
-.splash{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,#5a1220,#7a1f2e 55%,#962e41);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;animation:splashout .8s 1.8s cubic-bezier(.7,0,.2,1) both}
-@keyframes splashout{to{translate:0 -100%;opacity:0;visibility:hidden}}
-.sp-mono{font:800 3.4rem Bitter,Georgia,serif;width:130px;height:130px;border:3px solid #fff;border-radius:50%;display:grid;place-items:center;animation:pop .8s both}
-.sp-name{font:800 1.3rem Bitter,Georgia,serif;letter-spacing:.04em;text-align:center;padding:0 20px;animation:up .8s .3s both}
-.sp-bar{width:160px;height:3px;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden;position:relative}
-.sp-bar::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;animation:load 1.6s ease-in-out both}
-@keyframes load{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.hero h1{animation-delay:1.7s}
-.hero p{animation-delay:1.9s}
-.hero .cta{animation-delay:2.1s}
-.emblem{animation-delay:2s}
-footer{background:#3b0c15;color:#fff;padding:0;font-size:.95rem}
-.ft{max-width:1000px;margin:0 auto;padding:48px 20px 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px}
-.ft h4{margin:0 0 14px;font:800 1.05rem Bitter,Georgia,serif}
-.ft a{display:block;color:rgba(255,255,255,.8);text-decoration:none;padding:4px 0;transition:color .2s,translate .2s}
-.ft a:hover{color:#fff;translate:4px 0}
-.ft p{margin:0 0 6px;color:rgba(255,255,255,.8)}
-.soc{display:flex;gap:10px;margin-top:14px}
-.ft .soc a{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:grid;place-items:center;font-size:.75rem;font-weight:700;padding:0;color:#fff}
-.ft .soc a:hover{background:#fff;color:#7a1f2e;translate:0 -3px}
-.fb{border-top:1px solid rgba(255,255,255,.15);padding:18px 20px;text-align:center;font-size:.85rem;color:rgba(255,255,255,.7)}
-.lang{display:flex;gap:2px;margin-left:auto}
-.lang button{background:none;border:0;color:rgba(255,255,255,.7);font-weight:700;font-size:.85rem;padding:6px 8px;border-radius:4px}
-.lang button:hover{color:#fff}
-.lang button[aria-pressed="true"]{color:#fff;background:rgba(255,255,255,.18)}
-.soc svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.ai-fab{position:fixed;left:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:35;width:60px;height:60px;border-radius:50%;border:0;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 8px 24px rgba(122,31,46,.4);transition:transform .2s;animation:pop .6s 2.2s both,pulse 3s 3.2s infinite}
-.ai-fab:hover{transform:scale(1.08)}
-.ai-fab svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-@keyframes pulse{50%{box-shadow:0 8px 24px rgba(122,31,46,.4),0 0 0 12px rgba(122,31,46,.12)}}
-.ai{position:fixed;left:20px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:35;width:min(380px,calc(100vw - 40px));height:min(520px,calc(100vh - 140px));display:flex;flex-direction:column;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.28);animation:up .3s both}
-.ai[hidden]{display:none}
-.ai-h{background:var(--brand);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
-.ai-h small{display:block;opacity:.85;font-size:.8rem}
-.ai-x{background:rgba(255,255,255,.2);border:0;color:#fff;width:32px;height:32px;border-radius:50%;font-size:1.2rem;line-height:1}
-.ai-m{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:85%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;font-size:.95rem;animation:up .25s both}
-.msg.bot{background:var(--brand);color:#fff;border-bottom-left-radius:4px;align-self:flex-start}
-.msg.me{background:var(--surface);border:1px solid var(--line);border-bottom-right-radius:4px;align-self:flex-end}
-.dots span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#fff;animation:blink 1s infinite}
-.dots span:nth-child(2){animation-delay:.15s}
-.dots span:nth-child(3){animation-delay:.3s}
-@keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
-.ai-q{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}
-.ai-q button{border:1.5px solid var(--brand);background:transparent;color:var(--ink);border-radius:999px;padding:4px 12px;font-size:.85rem}
-.ai-q button:hover{background:var(--brand);color:#fff}
-.ai-f{display:flex;gap:8px;padding:10px 14px 2px}
-.ai-f input{margin:0;flex:1;border-radius:999px;padding:10px 14px}
-.ai-f button{width:44px;border:0;border-radius:12px;background:var(--brand);color:#fff;font-size:1.1rem}
-.ai-c{text-align:right;padding:0 16px 8px;color:var(--muted);font-size:.75rem}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAU Merch | Мерч университета</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="splash" id="splash">
-  <div class="sp-mono">TAU</div>
-  <div class="sp-name" data-name></div>
-  <div class="sp-bar"></div>
-</div>
-<header>
-  <div class="logo"><img id="logo" alt="" hidden><span data-name></span></div>
-  <div class="lang" id="lang">
-  <button data-lang="kk">ҚАЗ</button><button data-lang="ru">РУС</button><button data-lang="en">ENG</button>
-</div>
-  <button class="cartbtn" id="open" aria-label="Открыть корзину">Корзина · <span id="count">0</span></button>
+
+<header class="header">
+    <div class="logo">
+       <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+        <span>TAU MERCH</span>
+    </div>
+
+    <nav>
+        <a href="#" onclick="showPage('home'); return false;">Главная</a>
+        <a href="#" onclick="showPage('catalog'); return false;">Каталог</a>
+        <a href="#" onclick="showPage('reviews'); return false;">Отзывы</a>
+        <a href="#" onclick="showPage('about'); return false;">О нас</a>
+        <a href="#" onclick="showPage('contacts'); return false;">Контакты</a>
+    </nav>
+
+    <div class="header-buttons">
+        <button onclick="showPage('favorites')">♡ <span id="favCount">0</span></button>
+        <button onclick="openCart()">🛒 <span id="cartCount">0</span></button>
+        <button onclick="openAdmin()">⚙</button>
+    </div>
 </header>
 
-<section class="hero">
-  <svg class="emblem" viewBox="0 0 200 200" aria-hidden="true">
-    <defs><path id="ringpath" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
-    <g class="spin"><text class="ring"><textPath href="#ringpath" id="ring"></textPath></text></g>
-    <circle cx="100" cy="100" r="58" fill="none" stroke="#fff" stroke-width="2"/>
-    <circle cx="100" cy="100" r="50" fill="none" stroke="#fff" stroke-width="1" opacity=".5"/>
-    <text class="mono" id="mono" x="100" y="111" text-anchor="middle"></text>
-  </svg>
-  <h1>Носите университет с гордостью</h1>
-  <p>Атрибутика университета <span data-name></span></p>
-  <a class="cta" href="#catalog">Смотреть каталог</a>
-  <div class="pennant" aria-hidden="true"></div>
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <p class="subtitle">МЕРЧ УНИВЕРСИТЕТА</p>
+        <h1>Мерч, которым<br><span>гордятся</span></h1>
+        <p>Официальная одежда и аксессуары Тұран-Астана университета.</p>
+        <button class="btn" onclick="showPage('catalog')">Смотреть каталог</button>
+    </div>
+    <div class="hero-image">
+         <img src="logo2.png" alt="logo2" width="300" height="200">
+    </div>
 </section>
 
-<main id="catalog">
-  <div class="bar">
-    <h2>Каталог</h2>
-    <div class="chips" id="chips"></div>
-  </div>
-  <div class="grid" id="grid"></div>
-  <section class="reviews" id="reviews">
-  <h2>Отзывы</h2>
-  <p class="avg" id="avg"></p>
-  <div class="rgrid" id="rgrid"></div>
-  <form id="rform" class="rform">
-    <h3>Оставить отзыв</h3>
-    <label>Имя<input name="n" required></label>
-    <label>Оценка
-      <select name="r">
-        <option value="5">★★★★★</option><option value="4">★★★★☆</option>
-        <option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option>
-      </select>
-    </label>
-    <label>Отзыв<textarea name="t" rows="3" required></textarea></label>
-    <button class="pay" type="submit">Отправить отзыв</button>
-    <p class="note" id="rnote" hidden></p>
-  </form>
-</section>
+<main>
+
+    <section id="home" class="page">
+        <div class="section">
+            <h2>Категории</h2>
+            <div class="categories" id="categories"></div>
+        </div>
+
+        <div class="section">
+            <h2>Популярные товары</h2>
+            <div class="products" id="popular"></div>
+        </div>
+
+        <div class="section">
+            <h2>Новинки</h2>
+            <div class="products" id="newProducts"></div>
+        </div>
+    </section>
+
+    <section id="catalog" class="page hidden">
+        <div class="section">
+            <h2>Каталог</h2>
+
+            <div class="filters">
+                <input id="search" placeholder="Поиск товара..." oninput="renderCatalog()">
+
+                <select id="categoryFilter" onchange="renderCatalog()">
+                    <option value="">Все категории</option>
+                </select>
+
+                <select id="sort" onchange="renderCatalog()">
+                    <option value="">Сортировка</option>
+                    <option value="asc">Сначала дешевле</option>
+                    <option value="desc">Сначала дороже</option>
+                </select>
+            </div>
+
+            <div class="products" id="catalogProducts"></div>
+        </div>
+    </section>
+
+    <section id="favorites" class="page hidden">
+        <div class="section">
+            <h2>Избранное</h2>
+            <div class="products" id="favoriteProducts"></div>
+        </div>
+    </section>
+
+    <section id="reviews" class="page hidden">
+        <div class="section">
+            <h2>Отзывы</h2>
+
+            <div class="reviews-list" id="reviewsList"></div>
+
+            <form class="review-form" id="reviewForm">
+                <h3>Оставить отзыв</h3>
+
+                <label>
+                    Имя
+                    <input id="reviewName" required maxlength="60">
+                </label>
+
+                <label>
+                    Оценка
+                    <select id="reviewRating">
+                        <option value="5">★★★★★</option>
+                        <option value="4">★★★★</option>
+                        <option value="3">★★★</option>
+                        <option value="2">★★</option>
+                        <option value="1">★</option>
+                    </select>
+                </label>
+
+                <label>
+                    Отзыв
+                    <textarea id="reviewText" required maxlength="600"></textarea>
+                </label>
+
+                <button class="btn full">Отправить отзыв</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="help" class="page hidden">
+        <div class="section">
+            <h2>Помощь</h2>
+
+            <div class="help-block" id="help-how">
+                <h3>Как заказать</h3>
+                <p>Добавьте товары в корзину, нажмите «Оформить заказ», укажите имя, телефон и адрес, выберите способ оплаты и подтвердите заказ.</p>
+            </div>
+
+            <div class="help-block" id="help-payment">
+                <h3>Оплата</h3>
+                <p>Оплатить заказ можно при получении или онлайн — способ выбирается при оформлении заказа.</p>
+            </div>
+
+            <div class="help-block" id="help-delivery">
+                <h3>Доставка</h3>
+                <p>Доставка осуществляется по адресу, указанному при оформлении заказа. Сроки и стоимость уточняйте по телефону +7 778 867 35 04.</p>
+            </div>
+
+            <div class="help-block" id="help-returns">
+                <h3>Возврат и обмен</h3>
+                <p>По вопросам возврата и обмена свяжитесь с нами по телефону +7 778 867 35 04 или по email info@tau-edu.kz.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="page hidden">
+        <div class="section">
+            <h2>О нас</h2>
+            <p>Добро пожаловать в магазин мерча Тұран-Астана университета!</p>
+            <p>Здесь студенты, выпускники, преподаватели и гости университета могут выбрать одежду и аксессуары с символикой университета.</p>
+        </div>
+    </section>
+
+    <section id="contacts" class="page hidden">
+        <div class="section">
+            <h2>Контакты</h2>
+            <p>Телефон: +7 778 867 35 04</p>
+            <p>Email: info@tau-edu.kz</p>
+            <p>Адрес: г. Астана, улица Ықылас Дукенулы, 29</p>
+        </div>
+    </section>
+
 </main>
-<footer>
-  <div class="ft">
-    <div>
-      <h4>Магазин</h4>
-      <a href="#catalog">Каталог</a>
-      <a href="#reviews">Отзывы</a>
-      <a href="#" id="ftcart">Корзина</a>
+
+<!-- КОРЗИНА -->
+<div class="overlay hidden" id="overlay" onclick="closeCart()"></div>
+
+<div class="cart" id="cart">
+    <div class="cart-header">
+        <h2>Корзина</h2>
+        <button onclick="closeCart()">✕</button>
     </div>
-    <div>
-      <h4>Помощь</h4>
-      <a href="#">Как заказать</a>
-      <a href="#">Оплата</a>
-      <a href="#">Доставка</a>
-      <a href="#">Возврат и обмен</a>
+
+    <div id="cartItems"></div>
+
+    <div class="total">
+        <span>Итого:</span>
+        <strong id="total">0 ₸</strong>
     </div>
-    <div>
-      <h4>Университет</h4>
-      <a href="https://ВАШ-САЙТ.kz" target="_blank" rel="noopener">Сайт университета</a>
-      <a href="#">О нас</a>
-    </div>
-    <div>
-      <h4>Контакты</h4>
-      <p>г. Астана, улица Ыкылас Дукенулы, 29 </p>
-      <p>+7 778 867 35 04 </p>
-      <p>info@tau-edu.kz</p>
-     <div class="soc">
-  <a href="https://www.instagram.com/tau_edu.kz/" target="_blank" rel="noopener" aria-label="Instagram">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-  </a>
-  <a href="https://t.me/tau_admission_bot" target="_blank" rel="noopener" aria-label="Telegram">
-    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-  </a>
-  <a href="https://wa.me/7076242375" target="_blank" rel="noopener" aria-label="WhatsApp">
-    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><path d="M9.2 8.5c.3 1.9 2.6 4.6 5.1 5.4l1.3-1.2-1.7-1.1-.9.6c-.9-.4-1.6-1.1-2-2l.6-.9-1.1-1.7-1.3 1z" fill="currentColor" stroke="none"/></svg>
-  </a>
-  <a href="https://www.youtube.com/channel/UCqnRq2ISMcTG7HF60n0LXdA" target="_blank" rel="noopener" aria-label="YouTube">
-    <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
-  </a>
+
+    <button class="btn full" onclick="checkout()">Оформить заказ</button>
 </div>
-    </div>
-  </div>
-  <div class="fb">© 2026 <span data-name></span>. Все права защищены.</div>
-</footer>
-<div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer" aria-label="Корзина">
-  <div class="dh"><h2>Ваш заказ</h2><button class="x" id="close" aria-label="Закрыть корзину">×</button></div>
-  <div class="items" id="items"></div>
-  <div class="foot">
-    <div class="total"><span>Итого</span><span id="total"></span></div>
-    <button class="pay" id="pay" disabled>Оформить заказ</button>
-    <form id="form" hidden>
-      <label>Имя<input name="n" required autocomplete="name"></label>
-      <label>Телефон<input name="p" type="tel" required autocomplete="tel"></label>
-      <button class="pay" type="submit">Отправить заказ в WhatsApp</button>
+
+<!-- АДМИН ПАНЕЛЬ -->
+<div class="admin hidden" id="admin">
+    <button class="close" onclick="closeAdmin()">✕</button>
+    <h2>Управление товарами</h2>
+
+    <form id="productForm">
+        <input id="productName" placeholder="Название товара" required>
+
+        <select id="productCategory">
+            <option>Одежда</option>
+            <option>Аксессуары</option>
+            <option>Канцелярия</option>
+            <option>Новинки</option>
+        </select>
+
+        <input id="productPrice" type="number" placeholder="Цена" required>
+
+        <textarea id="productDescription" placeholder="Описание"></textarea>
+
+        <input id="productImage" type="file" accept="image/*">
+
+        <label>
+            <input type="checkbox" id="isPopular">
+            Популярный товар
+        </label>
+
+        <label>
+            <input type="checkbox" id="isNew">
+            Новинка
+        </label>
+
+        <button class="btn full">Добавить товар</button>
     </form>
-    <p class="note" id="note" hidden></p>
-  </div>
-</aside>
-<button class="ai-fab" id="aiFab" aria-label="AI" aria-expanded="false">
-  <svg viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="11" rx="3"/><circle cx="9.5" cy="13" r="1.4" fill="currentColor" stroke="none"/><circle cx="14.5" cy="13" r="1.4" fill="currentColor" stroke="none"/><path d="M12 8V5M10 5h4M9.5 16.5h5"/></svg>
-</button>
-<section class="ai" id="ai" hidden aria-label="TAU AI">
-  <div class="ai-h">
-    <div><b>TAU AI</b><small id="aiOn"></small></div>
-    <button class="ai-x" id="aiX" aria-label="×">×</button>
-  </div>
-  <div class="ai-m" id="aiM"></div>
-  <div class="ai-q" id="aiQ"></div>
-  <form class="ai-f" id="aiF">
-    <input id="aiI" maxlength="1000" autocomplete="off">
-    <button type="submit" aria-label="➤">➤</button>
-  </form>
-  <small class="ai-c" id="aiC">0/1000</small>
-</section>
-<script>
-/* ===== НАСТРОЙКИ: меняйте только этот блок и список товаров ===== */
-var CONFIG = {
-  shopName: "TURAN-ASTANA UNIVERSITY",
-  logo: "logo.png",          // путь к логотипу, например "logo.png" (пусто — без логотипа)
-  whatsapp: "7714929638",      // номер для заказов без плюса и пробелов, например "77011234567"
-  currency: "₸"
-};
 
-/* Товары. img — путь к фото, например "photos/hoodie.jpg" (пусто — показывается значок icon).
-   sizes — список размеров; для товаров без размера уберите эту строку.
-   cat — категория: кнопки фильтра создаются автоматически. */
-var PRODUCTS = [
-  {id:1, name:"Худи с логотипом Университета", cat:"Одежда", price:15000, img:"photos.jpg", icon:"", sizes:["S","M","L","XL"], desc:""},
-  {id:2, name:"", cat:"Одежда", price:6000, img:"", icon:"", sizes:["S","M","L","XL"], desc:""},
-  {id:3, name:"", cat:"Одежда", price:5000, img:"", icon:"", sizes:["s","M","L","XL"], desc:""},
-  {id:4, name:"", cat:"Аксессуары", price:3500, img:"", icon:"", desc:""},
-  {id:5, name:"", cat:"Аксессуары", price:3000, img:"", icon:"", desc:""},
-  {id:6, name:"", cat:"Аксессуары", price:2000, img:"", icon:"", desc:""},
-  {id:7, name:"", cat:"Аксессуары", price:2000, img:"", icon:"", desc:""},
-  {id:8, name:"", cat:"Одежда", price:5000, img:"", icon:"", sizes:["s","M","L","XL"], desc:""},
-];
-var REVIEWS = [];
-/* ===== конец настроек ===== */
+    <div id="adminProducts"></div>
+</div>
 
-var KEY = "shop-cart", cart = load(), cat = "all";
-var FKEY="shop-fav", fav=loadFav();
-function loadFav(){try{return JSON.parse(localStorage.getItem(FKEY)||"[]")}catch(e){return []}}
-function saveFav(){try{localStorage.setItem(FKEY,JSON.stringify(fav))}catch(e){}}
-var $ = function(i){return document.getElementById(i)};
-function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return {}}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(cart))}catch(e){}}
-function money(n){return n.toLocaleString("ru-RU")+" "+CONFIG.currency}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function prod(id){return PRODUCTS.filter(function(p){return String(p.id)===String(id)})[0]}
-function pic(p){return p.img?'<img src="'+esc(p.img)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span class="em">'+p.icon+'</span>'}
-function renderChips(){
-  var cats=[];PRODUCTS.forEach(function(p){if(cats.indexOf(p.cat)<0)cats.push(p.cat)});
-  $("chips").innerHTML=["all","fav"].concat(cats).map(function(c){
-    return '<button class="chip" data-cat="'+esc(c)+'" aria-pressed="'+(c===cat)+'">'+(c==="all"?"Все":c==="fav"?"♥ Избранное ("+fav.length+")":esc(c))+'</button>';
-  }).join("");
-}
-function renderGrid(){
-  $("grid").innerHTML=PRODUCTS.filter(function(p){return cat==="all"||(cat==="fav"?fav.indexOf(p.id)>-1:p.cat===cat)}).map(function(p){
-    var sz=p.sizes?'<select class="size" aria-label="Размер">'+p.sizes.map(function(s){return '<option>'+esc(s)+'</option>'}).join("")+'</select>':"";
-    return '<article class="card"><div class="tile">'+pic(p)+'<button class="fav" data-fav="'+p.id+'" aria-label="В избранное" aria-pressed="'+(fav.indexOf(p.id)>-1)+'">♥</button></div><div class="info"><h3>'+esc(p.name)+'</h3><p>'+esc(p.desc||"")+'</p>'+sz+'<div class="row"><span class="price">'+money(p.price)+'</span><button class="add" data-add="'+p.id+'">В корзину</button></div></div></article>';
-  }).join("");
-}
-function lines(){
-  return Object.keys(cart).map(function(k){
-    var a=k.split("|"),p=prod(a[0]);
-    return p?{key:k,p:p,size:a[1]||"",q:cart[k]}:null;
-  }).filter(Boolean);
-}
-function renderCart(){
-  var L=lines(),sum=0,n=0;
-  $("items").innerHTML=L.length?L.map(function(l){
-    sum+=l.p.price*l.q;n+=l.q;
-    return '<div class="it"><div class="ic">'+pic(l.p)+'</div><div><b>'+esc(l.p.name)+'</b>'+(l.size?'<small>Размер: '+esc(l.size)+'</small><br>':"")+'<span class="price">'+money(l.p.price*l.q)+'</span></div><div class="qty"><button data-dec="'+esc(l.key)+'" aria-label="Меньше">−</button><span>'+l.q+'</span><button data-inc="'+esc(l.key)+'" aria-label="Больше">+</button></div></div>';
-  }).join(""):'<p class="empty">Корзина пуста. Добавьте что-нибудь из каталога.</p>';
-  $("total").textContent=money(sum);
-  $("count").textContent=n;
-  $("pay").disabled=!n;
-  if(!n){$("form").hidden=true;$("pay").hidden=false}
-  save();
-}
-function setOpen(v){document.body.classList.toggle("open",v)}
+<!-- ОФОРМЛЕНИЕ -->
+<div class="checkout hidden" id="checkoutForm">
+    <button class="close" onclick="closeCheckout()">✕</button>
+    <h2>Оформление заказа</h2>
 
-document.addEventListener("click",function(e){
-  var t=e.target.closest("button");if(!t)return;
-  var d=t.dataset;
-  if(d.add){
-    var sel=t.closest(".card").querySelector(".size"),k=d.add+"|"+(sel?sel.value:"");
-    cart[k]=(cart[k]||0)+1;$("note").hidden=true;renderCart();
-    t.textContent="Добавлено ✓";t.classList.add("ok");
-    setTimeout(function(){t.textContent="В корзину";t.classList.remove("ok")},1000);
-    var cb=$("open");cb.classList.remove("bump");void cb.offsetWidth;cb.classList.add("bump");
-  }else if(d.inc){cart[d.inc]++;renderCart()}
-  else if(d.dec){if(--cart[d.dec]<=0)delete cart[d.dec];renderCart()}
-  else if(d.cat){cat=d.cat;renderChips();renderGrid();reveal()}
-  else if(d.fav){
-  var id=Number(d.fav),i=fav.indexOf(id);
-  if(i<0)fav.push(id);else fav.splice(i,1);
-  saveFav();renderChips();
-  if(cat==="fav"){renderGrid();reveal()}else t.setAttribute("aria-pressed",i<0);
-}
-});
-$("open").onclick=function(){setOpen(true)};
-$("close").onclick=$("overlay").onclick=function(){setOpen(false)};
-document.addEventListener("keydown",function(e){if(e.key==="Escape")setOpen(false)});
-$("pay").onclick=function(){$("pay").hidden=true;$("form").hidden=false;$("note").hidden=true};
+    <form id="orderForm">
+        <input name="name" placeholder="Имя и фамилия" required>
+        <input name="phone" placeholder="Номер телефона" required>
+        <textarea name="address" placeholder="Адрес доставки" required></textarea>
 
-$("form").onsubmit=function(e){
-  e.preventDefault();
-  var f=e.target,L=lines(),sum=0;
-  var msg="Заказ из магазина «"+CONFIG.shopName+"»:\n"+L.map(function(l,i){
-    sum+=l.p.price*l.q;
-    return (i+1)+". "+l.p.name+(l.size?" ("+l.size+")":"")+" × "+l.q+" — "+money(l.p.price*l.q);
-  }).join("\n")+"\nИтого: "+money(sum)+"\nИмя: "+f.n.value+"\nТелефон: "+f.p.value;
-  var note=$("note");note.hidden=false;
-  if(CONFIG.whatsapp){
-    window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(msg),"_blank");
-    cart={};f.reset();renderCart();
-    note.textContent="Заказ открыт в WhatsApp. Отправьте сообщение, чтобы завершить оформление.";
-  }else{
-    note.textContent="Укажите номер WhatsApp в настройках (CONFIG.whatsapp), и заказ будет открываться в чате. Текст заказа:\n\n"+msg;
-  }
-};
+        <select name="payment">
+            <option>Оплата при получении</option>
+            <option>Онлайн-оплата</option>
+        </select>
 
-document.title="Мерч — "+"TURAN-ASTANA UNIVERSITY";
-document.querySelectorAll("[data-name]").forEach(function(n){n.textContent="TURAN-ASTANA UNIVERSITY"});
-if(CONFIG.logo){var lg=$("logo");lg.src=CONFIG.logo;lg.hidden=false}
-$("mono").textContent="TAU";
-function fitRing(){
-  var r=$("ring");r.removeAttribute("letter-spacing");
-  r.textContent="TURAN-ASTANA UNIVERSITY".toUpperCase()+" • ";
-  var L=r.getComputedTextLength();
-  r.setAttribute("letter-spacing",Math.max(0,(486-L)/r.textContent.length));
-}
-try{fitRing();if(document.fonts)document.fonts.ready.then(fitRing)}catch(e){}
-var io="IntersectionObserver" in window?new IntersectionObserver(function(es){
-  es.forEach(function(e){
-    if(e.isIntersecting){var t=e.target;t.classList.add("in");io.unobserve(t);setTimeout(function(){t.style.transitionDelay=""},900)}
-  });
-},{threshold:.12}):null;
-function reveal(){
-  document.querySelectorAll(".card").forEach(function(c,i){
-    c.style.transitionDelay=(i%4)*70+"ms";
-    if(io)io.observe(c);else c.classList.add("in");
-  });
-}
-function stars(n){return "★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n)}
-function renderReviews(){
-  var n=REVIEWS.length,avg=n?(REVIEWS.reduce(function(s,r){return s+r.rating},0)/n).toFixed(1):"";
-  $("avg").innerHTML=n?'<span class="stars">'+stars(Math.round(avg))+'</span> '+avg+' · отзывов: '+n:"Пока нет отзывов. Будьте первым!";
-  $("rgrid").innerHTML=REVIEWS.map(function(r){
-    return '<article class="rc"><span class="stars">'+stars(r.rating)+'</span><p>'+esc(r.text)+'</p><small>'+esc(r.name)+(r.date?" · "+esc(r.date):"")+'</small></article>';
-  }).join("");
-}
-$("rform").onsubmit=function(e){
-  e.preventDefault();
-  var f=e.target,note=$("rnote");
-  var msg="Новый отзыв для магазина «"+CONFIG.shopName+"»:\nИмя: "+f.n.value+"\nОценка: "+f.r.value+"/5\nОтзыв: "+f.t.value;
-  note.hidden=false;
-  if(CONFIG.whatsapp){
-    window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(msg),"_blank");
-    f.reset();
-    note.textContent="Спасибо! Отправьте сообщение в WhatsApp, и отзыв будет передан на проверку.";
-  }else{
-    note.textContent="Укажите номер WhatsApp в настройках (CONFIG.whatsapp). Текст отзыва:\n\n"+msg;
-  }
-};
-renderChips();renderGrid();renderCart();reveal();renderReviews();
-/* ===== ПЕРЕВОДЫ: слева русский текст ровно как на сайте ===== */
-var LANG="ru";try{LANG=localStorage.getItem("shop-lang")||"ru"}catch(e){}
-var DICT={
- "Корзина ·":{kk:"Себет ·",en:"Cart ·"},
- "Носите университет с гордостью":{kk:"Университетті мақтанышпен киіңіз",en:"Wear your university with pride"},
- "Атрибутика университета в фирменных бордовом и белом цветах.":{kk:"Университет атрибутикасы фирмалық бордо және ақ түстерде.",en:"University merchandise in our signature burgundy and white."},
- "Смотреть каталог":{kk:"Каталогты қарау",en:"Browse catalog"},
- "Каталог":{kk:"Каталог",en:"Catalog"},
- "Все":{kk:"Барлығы",en:"All"},
- "Одежда":{kk:"Киім",en:"Clothing"},
- "Аксессуары":{kk:"Аксессуарлар",en:"Accessories"},
- "В корзину":{kk:"Себетке",en:"Add to cart"},
- "Добавлено ✓":{kk:"Қосылды ✓",en:"Added ✓"},
- "Ваш заказ":{kk:"Сіздің тапсырысыңыз",en:"Your order"},
- "Корзина пуста. Добавьте что-нибудь из каталога.":{kk:"Себет бос. Каталогтан бірдеңе қосыңыз.",en:"Your cart is empty. Add something from the catalog."},
- "Итого":{kk:"Барлығы",en:"Total"},
- "Оформить заказ":{kk:"Тапсырыс беру",en:"Checkout"},
- "Имя":{kk:"Аты-жөні",en:"Name"},
- "Телефон":{kk:"Телефон",en:"Phone"},
- "Отправить заказ в WhatsApp":{kk:"Тапсырысты WhatsApp-қа жіберу",en:"Send order via WhatsApp"},
- "Заказ открыт в WhatsApp. Отправьте сообщение, чтобы завершить оформление.":{kk:"Тапсырыс WhatsApp-та ашылды. Рәсімдеуді аяқтау үшін хабарламаны жіберіңіз.",en:"Your order is open in WhatsApp. Send the message to complete it."},
- "Отзывы":{kk:"Пікірлер",en:"Reviews"},
- "Оставить отзыв":{kk:"Пікір қалдыру",en:"Leave a review"},
- "Оценка":{kk:"Баға",en:"Rating"},
- "Отзыв":{kk:"Пікір",en:"Review"},
- "Отправить отзыв":{kk:"Пікірді жіберу",en:"Send review"},
- "Пока нет отзывов. Будьте первым!":{kk:"Әзірге пікір жоқ. Бірінші болыңыз!",en:"No reviews yet. Be the first!"},
- "Спасибо! Отправьте сообщение в WhatsApp, и отзыв будет передан на проверку.":{kk:"Рақмет! WhatsApp-та хабарламаны жіберіңіз, пікір тексеруге жіберіледі.",en:"Thank you! Send the message in WhatsApp and your review will be sent for moderation."},
- /* подвал */
- "Магазин":{kk:"Дүкен",en:"Shop"},
- "Корзина":{kk:"Себет",en:"Cart"},
- "Помощь":{kk:"Көмек",en:"Help"},
- "Как заказать":{kk:"Қалай тапсырыс беруге болады",en:"How to order"},
- "Оплата":{kk:"Төлем",en:"Payment"},
- "Доставка":{kk:"Жеткізу",en:"Delivery"},
- "Возврат и обмен":{kk:"Қайтару және айырбастау",en:"Returns and exchanges"},
- "Университет":{kk:"Университет",en:"University"},
- "Сайт университета":{kk:"Университет сайты",en:"University website"},
- "О нас":{kk:"Біз туралы",en:"About us"},
- "Контакты":{kk:"Байланыс",en:"Contacts"},
- ". Все права защищены.":{kk:". Барлық құқықтар қорғалған.",en:". All rights reserved."},
- /* товары: добавляйте сюда названия и описания своих товаров */
- "Худи с вышитым гербом":{kk:"Елтаңбасы кестелі худи",en:"Hoodie with embroidered crest"},
- "Плотный футер, бордовое с белой вышивкой":{kk:"Тығыз футер, ақ кестелі бордо түсті",en:"Heavy fleece, burgundy with white embroidery"},
- "Футболка с логотипом":{kk:"Логотипті футболка",en:"T-shirt with logo"},
- "Хлопок, белая с бордовым принтом":{kk:"Мақта, бордо принтті ақ түсті",en:"Cotton, white with burgundy print"},
- "Бейсболка":{kk:"Бейсболка",en:"Baseball cap"},
- "Регулируемая застёжка":{kk:"Реттелетін бекіткіш",en:"Adjustable strap"},
- "Шоппер":{kk:"Шоппер",en:"Tote bag"},
- "Плотный хлопок, влезает ноутбук":{kk:"Тығыз мақта, ноутбук сияды",en:"Heavy cotton, fits a laptop"},
- "Кружка":{kk:"Кружка",en:"Mug"},
- "Керамика, 350 мл":{kk:"Керамика, 350 мл",en:"Ceramic, 350 ml"},
- "Блокнот А5":{kk:"А5 блокнот",en:"A5 notebook"},
- "Бордовая обложка, 80 листов":{kk:"Бордо мұқаба, 80 парақ",en:"Burgundy cover, 80 pages"}
-};
-var PAT=[
- [/^♥ Избранное \((\d+)\)$/,{kk:"♥ Таңдаулылар ($1)",en:"♥ Favorites ($1)"}],
- [/^Размер: (.+)$/,{kk:"Өлшемі: $1",en:"Size: $1"}],
- [/^([\d.]+) · отзывов: (\d+)$/,{kk:"$1 · пікір: $2",en:"$1 · reviews: $2"}]
-];
+        <button class="btn full">Подтвердить заказ</button>
+    </form>
+</div>
 
-var orig=new WeakMap();
-function trans(s){
-  var k=s.trim(),d=DICT[k];
-  if(d)return d[LANG]||null;
-  for(var i=0;i<PAT.length;i++){
-    var m=k.match(PAT[i][0]);
-    if(m&&PAT[i][1][LANG])return PAT[i][1][LANG].replace(/\$(\d)/g,function(_,n){return m[n]});
-  }
-  return null;
-}
-function tr(node){
-  var had=orig.has(node),s=had?orig.get(node):node.nodeValue;
-  if(LANG==="ru"){if(had&&node.nodeValue!==s)node.nodeValue=s;return}
-  var r=trans(s);if(r===null)return;
-  if(!had)orig.set(node,s);
-  var out=s.replace(s.trim(),function(){return r});
-  if(node.nodeValue!==out)node.nodeValue=out;
-}
-function walk(root){
-  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,list=[];
-  while(n=w.nextNode()){if(!/^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName))list.push(n)}
-  list.forEach(tr);
-}
-function setLang(l){
-  LANG=l;try{localStorage.setItem("shop-lang",l)}catch(e){}
-  document.documentElement.lang=l;
-  document.querySelectorAll("#lang button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.lang===l)});
-  walk(document.body);
-}
-new MutationObserver(function(ms){
-  ms.forEach(function(m){m.addedNodes.forEach(function(a){a.nodeType===3?tr(a):walk(a)})});
-}).observe(document.body,{childList:true,subtree:true});
-$("lang").onclick=function(e){var b=e.target.closest("button");if(b)setLang(b.dataset.lang)};
-setLang(LANG);
-/* ===== ИИ-помощник ===== */
-var AI={
-  online:{ru:"Онлайн",kk:"Онлайн",en:"Online"},
-  ph:{ru:"Введите сообщение…",kk:"Хабарлама жазыңыз…",en:"Type a message…"},
-  hi:{ru:"👋 Здравствуйте! Я помощник магазина.\n\nМогу подсказать про:\n• заказ\n• доставку и оплату\n• размеры\n• контакты\n\nНапишите ваш вопрос 🙂",
-      kk:"👋 Сәлеметсіз бе! Мен дүкен көмекшісімін.\n\nМына тақырыптар бойынша көмектесе аламын:\n• тапсырыс\n• жеткізу және төлем\n• өлшемдер\n• байланыс\n\nСұрағыңызды жазыңыз 🙂",
-      en:"👋 Hello! I'm the store assistant.\n\nI can help with:\n• ordering\n• delivery and payment\n• sizes\n• contacts\n\nType your question 🙂"},
-  none:{ru:"Точного ответа у меня нет. Напишите нам в WhatsApp, и сотрудник поможет.",
-        kk:"Нақты жауап таба алмадым. WhatsApp-қа жазыңыз, қызметкер көмектеседі.",
-        en:"I couldn't find an exact answer. Message us on WhatsApp and a team member will help."},
-  chips:[{ru:"Как заказать?",kk:"Қалай тапсырыс беремін?",en:"How to order?"},
-         {ru:"Доставка",kk:"Жеткізу",en:"Delivery"},
-         {ru:"Оплата",kk:"Төлем",en:"Payment"},
-         {ru:"Контакты",kk:"Байланыс",en:"Contacts"}]
-};
-/* Вопросы и ответы. k — слова, по которым ищем (маленькими буквами), a — ответ на трёх языках.
-   Тексты про доставку и оплату впишите свои вместо ВПИШИТЕ. */
-var FAQ=[
- {k:["заказ","оформ","купить","корзин","order","buy","cart","тапсырыс","себет"],
-  a:{ru:"Выберите товар, нажмите «В корзину», затем откройте корзину и нажмите «Оформить заказ». Заказ откроется в WhatsApp, останется отправить сообщение.",
-     kk:"Тауарды таңдап, «Себетке» батырмасын басыңыз, сосын себетті ашып «Тапсырыс беру» дегенді басыңыз. Тапсырыс WhatsApp-та ашылады, хабарламаны жіберсеңіз болғаны.",
-     en:"Pick an item, tap “Add to cart”, open the cart and tap “Checkout”. Your order opens in WhatsApp, and you just send the message."}},
- {k:["доставк","привез","deliver","shipping","жеткіз"],
-  a:{ru:"ВПИШИТЕ: условия и сроки доставки.",kk:"ЖАЗЫҢЫЗ: жеткізу шарттары мен мерзімі.",en:"FILL IN: delivery terms and timing."}},
- {k:["оплат","цена","стоим","pay","price","cost","төлем","баға"],
-  a:{ru:"ВПИШИТЕ: способы оплаты.",kk:"ЖАЗЫҢЫЗ: төлем тәсілдері.",en:"FILL IN: payment methods."}},
- {k:["размер","size","өлшем"],
-  a:{ru:"Размер выбирается в карточке товара перед добавлением в корзину.",
-     kk:"Өлшемді себетке қосар алдында тауар карточкасында таңдайсыз.",
-     en:"Choose the size on the product card before adding it to the cart."}},
- {k:["контакт","телефон","адрес","связ","почт","phone","address","contact","email","байланыс","мекенжай"],
-  a:{ru:"г. Астана, улица Ыкылас Дукенулы, 29\n+7 778 867 35 04\ninfo@tau-edu.kz",
-     kk:"Астана қ., Ықылас Дүкенұлы көшесі, 29\n+7 778 867 35 04\ninfo@tau-edu.kz",
-     en:"Astana, Ykylas Dukenuly St., 29\n+7 778 867 35 04\ninfo@tau-edu.kz"}}
-];
+<footer class="footer">
+    <div class="footer-grid">
 
-function aiL(o){return o[LANG]||o.ru}
-function aiScroll(){$("aiM").scrollTop=$("aiM").scrollHeight}
-function aiAdd(text,cls){
-  var m=document.createElement("div");m.className="msg "+cls;
-  m.textContent=cls==="me"?text+"\u200b":text; /* \u200b не даёт переводчику сайта менять сообщения пользователя */
-  $("aiM").appendChild(m);aiScroll();return m;
-}
-function aiAsk(q){
-  aiAdd(q,"me");
-  var d=aiAdd("","bot");
-  d.innerHTML='<span class="dots"><span></span><span></span><span></span></span>';
-  if(CONFIG.aiUrl){ /* необязательно: адрес вашего сервера с настоящим ИИ */
-    fetch(CONFIG.aiUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:q,lang:LANG})})
-      .then(function(r){return r.json()})
-      .then(function(j){d.textContent=j.reply;aiScroll()})
-      .catch(function(){d.textContent=aiL(AI.none)});
-    return;
-  }
-  var s=q.toLowerCase(),best=null,hit=0;
-  FAQ.forEach(function(f){
-    var n=f.k.filter(function(w){return s.indexOf(w)>-1}).length;
-    if(n>hit){hit=n;best=f}
-  });
-  setTimeout(function(){d.textContent=aiL(best?best.a:AI.none);aiScroll()},700);
-}
-function aiLang(){
-  $("aiOn").textContent=aiL(AI.online);
-  $("aiI").placeholder=aiL(AI.ph);
-  $("aiQ").innerHTML=AI.chips.map(function(c){return '<button type="button">'+esc(aiL(c))+'</button>'}).join("");
-}
-function aiOpen(v){
-  $("ai").hidden=!v;$("aiFab").setAttribute("aria-expanded",v);
-  if(v){
-    aiLang();
-    if(!$("aiM").children.length)aiAdd(aiL(AI.hi),"bot");
-    $("aiI").focus();
-  }
-}
-$("aiFab").onclick=function(){aiOpen($("ai").hidden)};
-$("aiX").onclick=function(){aiOpen(false)};
-$("aiQ").onclick=function(e){var b=e.target.closest("button");if(b)aiAsk(b.textContent)};
-$("aiI").oninput=function(){$("aiC").textContent=this.value.length+"/1000"};
-$("aiF").onsubmit=function(e){
-  e.preventDefault();
-  var v=$("aiI").value.trim();if(!v)return;
-  $("aiI").value="";$("aiC").textContent="0/1000";aiAsk(v);
-};
-var _setLang=setLang;
-setLang=function(l){_setLang(l);aiLang()};
-aiLang();
-</script>
+        <div>
+            <h4>Магазин</h4>
+            <a href="#" onclick="showPage('catalog'); return false;">Каталог</a>
+            <a href="#" onclick="showPage('reviews'); return false;">Отзывы</a>
+            <a href="#" onclick="openCart(); return false;">Корзина</a>
+        </div>
+
+        <div>
+            <h4>Помощь</h4>
+            <a href="#" onclick="showPage('help', 'help-how'); return false;">Как заказать</a>
+            <a href="#" onclick="showPage('help', 'help-payment'); return false;">Оплата</a>
+            <a href="#" onclick="showPage('help', 'help-delivery'); return false;">Доставка</a>
+            <a href="#" onclick="showPage('help', 'help-returns'); return false;">Возврат и обмен</a>
+        </div>
+
+        <div>
+            <h4>Университет</h4>
+            <a href="https://tau-edu.kz" target="_blank" rel="noopener">Сайт университета</a>
+            <a href="#" onclick="showPage('about'); return false;">О нас</a>
+        </div>
+
+        <div>
+            <h4>Контакты</h4>
+            <p>г. Астана, улица Ықылас Дукенулы, 29</p>
+            <a href="tel:+77788673504">+7 778 867 35 04</a>
+            <a href="mailto:info@tau-edu.kz">info@tau-edu.kz</a>
+
+            <!-- Замените href="#" на ссылки на ваши соцсети -->
+            <div class="socials">
+                <a href="https://www.instagram.com/tau_edu.kz/" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+                </a>
+                <a href="https://t.me/tau_admission_bot" aria-label="Telegram">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+                </a>
+                <a href="https://wa.me/qr/OSX2PU4OT4KZD1"aria-label="WhatsApp">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.7-4.9A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 9.5c.5 2 2.5 4 5 5l1.5-1.5-2-1-1 .7c-.8-.4-1.6-1.2-2-2l.7-1-1-2z"/></svg>
+                </a>
+                <a href="https://www.youtube.com/channel/UCqnRq2ISMcTG7HF60n0LXdA" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 TURAN-ASTANA UNIVERSITY. Все права защищены.
+    </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
